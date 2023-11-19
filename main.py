@@ -1,6 +1,6 @@
 import os
 
-from PIL import Image
+from PIL import Image, ImageFilter
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import *
@@ -73,8 +73,23 @@ class WorkPhoto:
     def rotate_right(self):
         self.image = self.image.transpose(Image.ROTATE_270)
         self.showImage()
+    def mirror(self):
+        self.image = self.image.transpose(Image.FLIP_LEFT_RIGHT)
+        self.showImage()
+
+    def sharpness(self):
+        self.image = self.image.filter(ImageFilter.SHARPEN)
+        self.showImage()
+
+    def chb (self):
+        self.image = self.image.convert("L")
+        self.showImage()
+
 
 work = WorkPhoto()
+chb.clicked.connect(work.chb)
+sharpness.clicked.connect(work.sharpness)
+mirror.clicked.connect(work.mirror)
 left.clicked.connect(work.rotate_left)
 right.clicked.connect(work.rotate_right)
 def open_folder():

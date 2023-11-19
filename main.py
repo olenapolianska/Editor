@@ -1,9 +1,11 @@
 import os
+from email.mime import image
 
-from PIL import Image, ImageFilter
+from PIL import Image, ImageFilter, ImageEnhance
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import *
+from pygments.formatters import img
 
 app = QApplication([ ])
 
@@ -17,11 +19,17 @@ right = QPushButton("Вправо")
 mirror = QPushButton("Дзеркало")
 sharpness = QPushButton("Різкість")
 chb = QPushButton("Ч/Б")
+contour = QPushButton("Накладенняконтурів")
+emboss = QPushButton("Тиснення")
+brightness = QPushButton("Яскравість")
+blur = QPushButton("Розмивання")
+smooth = QPushButton("Згладжування")
 
 mainline = QHBoxLayout()
 line = QVBoxLayout()
 line2 = QVBoxLayout()
 line3 = QHBoxLayout()
+line4 = QHBoxLayout()
 mainline.addLayout(line)
 mainline.addLayout(line2)
 
@@ -29,11 +37,17 @@ line.addWidget(folder)
 line.addWidget(list)
 line2.addWidget(photo)
 line2.addLayout(line3)
+line2.addLayout(line4)
 line3.addWidget(left)
 line3.addWidget(right)
 line3.addWidget(mirror)
 line3.addWidget(sharpness)
 line3.addWidget(chb)
+line4.addWidget(contour)
+line4.addWidget(emboss)
+line4.addWidget(brightness)
+line4.addWidget(blur)
+line4.addWidget(smooth)
 
 app.setStyleSheet("""
         QWidget{
@@ -42,7 +56,7 @@ app.setStyleSheet("""
         QPushButton
         {
 
-            background-color:#E7D4FD;
+            background-color:#FBFF6B;
             font-size: 11px;
             color: grey;
             font-family: Courier New;
@@ -85,8 +99,35 @@ class WorkPhoto:
         self.image = self.image.convert("L")
         self.showImage()
 
+    def contour(self):
+        self.image = self.image.filter(ImageFilter.CONTOUR)
+        self.showImage()
+
+    def emboss(self):
+        self.image = self.image.filter(ImageFilter.EMBOSS )
+        self.showImage()
+
+    def brightness(self):
+        self.image = ImageEnhance.Brightness(self.image).enhance(1.5)
+        self.showImage()
+
+    def blur(self):
+        self.image = self.image.filter(ImageFilter.BLUR )
+        self.showImage()
+
+    def smooth(self):
+        self.image = self.image.filter(ImageFilter.SMOOTH )
+        self.showImage()
+
+
+
 
 work = WorkPhoto()
+smooth.clicked.connect(work.smooth)
+blur.clicked.connect(work.blur)
+brightness.clicked.connect(work.brightness)
+emboss.clicked.connect(work.emboss)
+contour.clicked.connect(work.contour)
 chb.clicked.connect(work.chb)
 sharpness.clicked.connect(work.sharpness)
 mirror.clicked.connect(work.mirror)
